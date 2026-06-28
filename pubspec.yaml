@@ -1,0 +1,76 @@
+name: pangantech
+description: Aplikasi Toko Sembako Modern - UAS Mobile Programming Universitas Pamulang
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  audioplayers: ^6.0.0
+
+  # HTTP Client untuk konsumsi REST API
+  http: ^1.2.1
+
+  # Database SQLite lokal untuk CRUD
+  sqflite: ^2.3.3
+
+  # Helper untuk mendapatkan path direktori di device
+  path: ^1.9.0
+  path_provider: ^2.1.3
+
+  # State management ringan
+  provider: ^6.1.5+1
+
+  # Toast / Snackbar alternatif
+  fluttertoast: ^8.2.8
+
+  # Icon pack tambahan
+  cupertino_icons: ^1.0.6
+
+  # Video player (placeholder multimedia)
+  video_player: ^2.9.1
+
+  # Custom launcher icons (untuk build APK)
+  flutter_launcher_icons: ^0.14.1
+
+  # Shared preferences untuk menyimpan setting tema
+  shared_preferences: ^2.3.2
+
+  # Google fonts untuk tampilan modern
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+# Konfigurasi Flutter Launcher Icons (logo kustom APK)
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo_pangantech.png"
+  min_sdk_android: 21
+  web:
+    generate: false
+
+flutter:
+  uses-material-design: true
+
+  # Deklarasikan assets yang digunakan
+  assets:
+    - assets/images/
+    - assets/audio/
+    - assets/video/
+
+  fonts:
+    - family: PoppinsCustom
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
