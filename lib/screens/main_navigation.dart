@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import '../services/app_provider.dart';
 import '../constants/app_colors.dart';
 import 'dashboard/dashboard_screen.dart';
-import 'products/product_screen.dart';
+import 'products/product_screen.dart'; // Memuat ProductScreen
 import 'cart/cart_screen.dart';
 import 'package:pangantech/profile/profile_screen.dart';
 import 'settings/settings_screen.dart';
@@ -25,10 +25,10 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   // --- Daftar halaman untuk setiap tab ---
   // Dibuat sebagai variabel final agar tidak di-rebuild setiap kali index berubah
-  final List<Widget> _pages = const [
+  final List<Widget> _pages =  [
     DashboardScreen(),    // Tab 0: Dashboard
-    ProductsScreen(),     // Tab 1: Daftar Sembako <-- Target Navigasi Utama!
-    CartScreen(),         // Tab 2: Keranjang
+    ProductScreen(),      // FIX UTAMA: Diubah dari ProductsScreen() menjadi ProductScreen() agar sinkron dengan nama class file-nya
+    CartScreen(key: UniqueKey()),         // Tab 2: Keranjang
     ProfileScreen(),      // Tab 3: Profil
     SettingsScreen(),     // Tab 4: Pengaturan
   ];
@@ -39,7 +39,6 @@ class _MainNavigationState extends State<MainNavigation> {
     final int cartCount = context.watch<CartProvider>().totalQuantity;
 
     // 2. MENDENGARKAN INDEX AKTIF DARI GLOBAL PROVIDER
-    // Menggantikan variabel lokal `_currentIndex` agar bisa dikontrol dari CartScreen
     final int selectedIndexFromProvider = context.watch<CartProvider>().selectedIndex;
 
     return Scaffold(

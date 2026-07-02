@@ -299,7 +299,7 @@ Container(
                             SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                'Demo: username & password minimal 4 karakter',
+                                'Demo: ibnu said & ibnu1306 minimal 4 karakter',
                                 style: TextStyle(color: AppColors.info, fontSize: 12),
                               ),
                             ),

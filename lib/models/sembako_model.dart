@@ -16,31 +16,31 @@ class SembakoModel {
   final String imageUrl;   // URL gambar produk (dari network)
   final String icon;       // Emoji icon untuk representasi cepat
 
-  // --- Constructor ---
+  // --- Constructor (PERBAIKAN: Menghapus required pada properti opsional & memberi nilai default) ---
   const SembakoModel({
     this.id,
     required this.nama,
-    required this.kategori,
+    this.kategori = 'Umum',
     required this.harga,
-    required this.stok,
-    required this.satuan,
-    required this.deskripsi,
-    required this.imageUrl,
-    required this.icon,
+    this.stok = 0,
+    this.satuan = 'pcs',
+    this.deskripsi = '',
+    this.imageUrl = '',
+    this.icon = '🛒',
   });
 
-  // --- Konversi dari Map (hasil query SQLite → Object Dart) ---
+  // --- Konversi dari Map (PERBAIKAN: Ditambahkan null-safety/handling jika data DB kosong) ---
   factory SembakoModel.fromMap(Map<String, dynamic> map) {
     return SembakoModel(
       id: map['id'] as int?,
-      nama: map['nama'] as String,
-      kategori: map['kategori'] as String,
-      harga: (map['harga'] as num).toDouble(),
-      stok: map['stok'] as int,
-      satuan: map['satuan'] as String,
-      deskripsi: map['deskripsi'] as String,
-      imageUrl: map['imageUrl'] as String,
-      icon: map['icon'] as String,
+      nama: map['nama'] as String? ?? '',
+      kategori: map['kategori'] as String? ?? 'Umum',
+      harga: (map['harga'] as num?)?.toDouble() ?? 0.0,
+      stok: map['stok'] as int? ?? 0,
+      satuan: map['satuan'] as String? ?? 'pcs',
+      deskripsi: map['deskripsi'] as String? ?? '',
+      imageUrl: map['imageUrl'] as String? ?? '',
+      icon: map['icon'] as String? ?? '🛒',
     );
   }
 
@@ -75,7 +75,6 @@ class SembakoModel {
   }
 
   // --- copyWith: Membuat salinan objek dengan nilai yang diubah ---
-  // Berguna untuk operasi UPDATE tanpa mengubah objek asli
   SembakoModel copyWith({
     int? id,
     String? nama,
@@ -100,7 +99,6 @@ class SembakoModel {
     );
   }
 
-  // --- toString untuk debugging ---
   @override
   String toString() {
     return 'SembakoModel(id: $id, nama: $nama, harga: $harga, stok: $stok)';
@@ -125,7 +123,7 @@ class CartItemModel {
     required this.namaProduk,
     required this.hargaSatuan,
     required this.jumlah,
-    required this.icon,
+    this.icon = '🛒',        // Diubah menjadi opsional dengan nilai default
   });
 
   // --- Total harga untuk item ini ---
@@ -147,10 +145,10 @@ class CartItemModel {
     return CartItemModel(
       id: map['id'] as int?,
       sembakoId: map['sembakoId'] as int,
-      namaProduk: map['namaProduk'] as String,
-      hargaSatuan: (map['hargaSatuan'] as num).toDouble(),
-      jumlah: map['jumlah'] as int,
-      icon: map['icon'] as String,
+      namaProduk: map['namaProduk'] as String? ?? '',
+      hargaSatuan: (map['hargaSatuan'] as num?)?.toDouble() ?? 0.0,
+      jumlah: map['jumlah'] as int? ?? 1,
+      icon: map['icon'] as String? ?? '🛒',
     );
   }
 

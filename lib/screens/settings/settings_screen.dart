@@ -1,7 +1,7 @@
 // ============================================================
 // FILE: lib/screens/settings/settings_screen.dart
-// Deskripsi: Halaman Pengaturan Aplikasi
-//            Fitur: Toggle Dark Mode, Tentang Aplikasi, Reset Data
+// Deskripsi: Halaman Pengaturan Aplikasi (Full Terintegrasi Provider)
+//            Fitur: Toggle Dark Mode, Notifikasi Dinamis, Tentang Aplikasi, Reset Data
 // ============================================================
 
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Memantau state tema dan notifikasi dari ThemeProvider
     final ThemeProvider themeProvider = context.watch<ThemeProvider>();
     final DatabaseHelper dbHelper = DatabaseHelper();
 
@@ -44,34 +45,50 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
 
-          // ---- Seksi Notifikasi ----
+          // ---- Seksi Notifikasi (SUDAH DINAMIS) ----
           _buildSectionHeader('Notifikasi'),
           Card(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Column(
               children: [
+                // Sakelar Notifikasi Promo
                 SwitchListTile(
                   secondary: const Icon(Icons.notifications_outlined, color: AppColors.primary),
                   title: const Text('Notifikasi Promo'),
                   subtitle: const Text('Dapatkan info promo terbaru'),
-                  value: true,
+                  value: themeProvider.isPromoNotifActive, // Mengambil nilai dari provider
                   onChanged: (val) {
+                    themeProvider.togglePromoNotif(); // Mengubah status di provider
+                    
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(val ? 'Notifikasi diaktifkan' : 'Notifikasi dinonaktifkan'),
+                        content: Text(val ? '✅ Notifikasi promo diaktifkan' : '❌ Notifikasi promo dinonaktifkan'),
                         behavior: SnackBarBehavior.floating,
+                        duration: const Duration(seconds: 1),
                       ),
                     );
                   },
                   activeColor: AppColors.primary,
                 ),
                 const Divider(height: 1, indent: 54),
+                
+                // Sakelar Update Pengiriman
                 SwitchListTile(
                   secondary: const Icon(Icons.local_shipping_outlined, color: AppColors.primary),
                   title: const Text('Update Pengiriman'),
                   subtitle: const Text('Notifikasi status pesanan'),
-                  value: true,
-                  onChanged: (_) {},
+                  value: themeProvider.isShippingNotifActive, // Mengambil nilai dari provider
+                  onChanged: (val) {
+                    themeProvider.toggleShippingNotif(); // Mengubah status di provider
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(val ? '✅ Notifikasi pengiriman aktif' : '❌ Notifikasi pengiriman nonaktif'),
+                        behavior: SnackBarBehavior.floating,
+                        duration: const Duration(seconds: 1),
+                      ),
+                    );
+                  },
                   activeColor: AppColors.primary,
                 ),
               ],
@@ -221,6 +238,7 @@ class SettingsScreen extends StatelessWidget {
 
     if (confirm == true && context.mounted) {
       await dbHelper.clearCart();
+      context.read<CartProvider>().clearCart(); 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
